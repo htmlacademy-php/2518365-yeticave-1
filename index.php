@@ -48,6 +48,11 @@ $lots = [
         'img' => '/img/lot-6.jpg',
     ],
 ];
+
+function get_price(int $price): string
+{
+    return number_format($price, 0, '.', ' ') . ' ₽';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -122,7 +127,7 @@ $lots = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$lot['price'] ?? 0;?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=get_price($lot['price'] ?? 0);?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
