@@ -143,4 +143,13 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-
+/**
+ * Форматирует сумму и добавлениет к ней знака рубля
+ *
+ * @param int $price Неотформатированная сумма
+ * @return string Отформатированная сумма со знаком рубля
+ */
+function get_price(int $price): string
+{
+    return number_format($price, 0, '.', ' ') . ' ₽';
+}
