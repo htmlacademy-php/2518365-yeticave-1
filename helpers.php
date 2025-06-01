@@ -153,3 +153,31 @@ function get_price(int $price): string
 {
     return number_format($price, 0, '.', ' ') . ' ₽';
 }
+
+/**
+ * Принимает дату в формате ГГГГ-ММ-ДД и возвращает массив,
+ * где первый элемент — целое количество часов до даты, а второй — остаток в минутах
+ * @param string $date Дата
+ * @return array Массив из двух строковых переменных, часов и минут
+ */
+function get_dt_range(string $date): array
+{
+    date_default_timezone_set('Europe/Moscow');
+    $expiryDate = DateTime::createFromFormat('Y-m-d', $date);
+    $expiryDate->setTime(23, 59, 59);
+    $currentDate = new DateTime();
+    $dt_range = $currentDate->diff($expiryDate);
+
+    $hours = 0;
+    $minutes = 0;
+
+    if (!$dt_range->invert) {
+        $hours = $dt_range->days * 24 + $dt_range->h;
+        $minutes = $dt_range->i;
+    }
+
+    $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
+    $minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
+
+    return [$hours, $minutes];
+}
