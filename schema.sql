@@ -28,14 +28,15 @@ CREATE TABLE lots (
     description VARCHAR(512) NOT NULL,
     img VARCHAR(128) NOT NULL,
     start_price INT UNSIGNED NOT NULL,
-    date_end TIMESTAMP NOT NULL,
+    date_end DATE NOT NULL,
     bet_step INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     winner_id INT UNSIGNED,
     category_id INT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id, winner_id) REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (winner_id) REFERENCES users (id),
     FOREIGN KEY (category_id) REFERENCES categories (id)
 ) ENGINE = INNODB;
 
