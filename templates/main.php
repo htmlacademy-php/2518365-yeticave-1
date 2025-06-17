@@ -14,8 +14,8 @@ declare(strict_types=1);
         <ul class="promo__list">
             <?php if (!empty($categories)): ?>
                 <?php foreach ($categories as $category): ?>
-                <li class="promo__item promo__item--boards">
-                    <a class="promo__link" href="pages/all-lots.html"><?=$category;?></a>
+                <li class="promo__item promo__item--<?=isset($category['symbol_code']) ? $category['symbol_code'] : '';?>">
+                    <a class="promo__link" href="pages/all-lots.html"><?=$category['name'] ?? '';?></a>
                 </li>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -38,13 +38,13 @@ declare(strict_types=1);
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=get_price($lot['price'] ?? 0);?></span>
+                            <span class="lot__cost"><?=get_price($lot['start_price'] ?? 0);?></span>
                         </div>
-                        <?php if (isset($lot['date'])):
-                            get_dt_range($lot['date'])
+                        <?php if (isset($lot['date_end'])):
+                            get_dt_range($lot['date_end'])
                         ?>
-                        <div class="lot__timer timer <?=(get_dt_range($lot['date']))[0] === '00' ? 'timer--finishing' :'';?>">
-                            <?=(get_dt_range($lot['date']))[0].':'.(get_dt_range($lot['date']))[1];?>
+                        <div class="lot__timer timer <?=(get_dt_range($lot['date_end']))[0] === '00' ? 'timer--finishing' :'';?>">
+                            <?=(get_dt_range($lot['date_end']))[0].':'.(get_dt_range($lot['date_end']))[1];?>
                         </div>
                         <?php endif; ?>
                     </div>
