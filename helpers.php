@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -176,8 +179,8 @@ function get_dt_range(string $date): array
         $minutes = $dt_range->i;
     }
 
-    $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
-    $minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
+    $hours = str_pad("$hours", 2, "0", STR_PAD_LEFT);
+    $minutes = str_pad("$minutes", 2, "0", STR_PAD_LEFT);
 
     return [$hours, $minutes];
 }

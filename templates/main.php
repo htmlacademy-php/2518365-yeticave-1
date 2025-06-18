@@ -38,7 +38,7 @@ declare(strict_types=1);
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=get_price($lot['start_price'] ?? 0);?></span>
+                            <span class="lot__cost"><?=get_price((int)$lot['start_price'] ?? 0);?></span>
                         </div>
                         <?php if (isset($lot['date_end'])):
                             get_dt_range($lot['date_end'])
