@@ -154,7 +154,10 @@ function include_template($name, array $data = []) {
  */
 function get_price(int $price): string
 {
+    if ($price >= 1000){
     return number_format($price, 0, '.', ' ') . ' ₽';
+    }
+    return $price . ' ₽';
 }
 
 /**

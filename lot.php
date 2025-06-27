@@ -12,7 +12,7 @@ declare(strict_types=1);
 require_once 'helpers.php';
 require_once 'init.php';
 
-$title = 'Главная';
+$title = 'Лот';
 $is_auth = rand(0, 1);
 $user_name = 'Алексей';
 
@@ -24,19 +24,25 @@ if (!(mysqli_query($link, $sql))) {
     $page_content = include_template('error.php', ['error' => mysqli_error($link)]);
 }
 $categories = mysqli_fetch_all(mysqli_query($link, $sql), MYSQLI_ASSOC);
-$sql = 'SELECT l.id, l.name, l.start_price, l.img, l.date_end, b.price, c.name as category_name FROM lots l '
-     . 'JOIN categories c ON l.category_id = c.id '
-     . 'LEFT JOIN bets b ON l.id = b.lot_id '
-     . 'ORDER BY l.created_at DESC LIMIT 6';
+
+if (!isset($_GET['id'])) {
+  $page_content = include_template('404.php', ['categories' => $categories]);
+}
+else {
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+$sql = "SELECT l.*, c.name as category_name FROM lots l JOIN categories c ON l.category_id = c.id WHERE l.id = $id";
 if (!(mysqli_query($link, $sql))) {
     $page_content = include_template('error.php', ['error' => mysqli_error($link)]);
 }
 $lots = mysqli_fetch_all(mysqli_query($link, $sql), MYSQLI_ASSOC);
-
-$page_content = include_template('main.php', [
-    'categories' => $categories,
-    'lots' => $lots
-]);
+if (empty($lots)) {
+    $page_content = include_template('404.php', ['categories' => $categories]);
+}
+else {
+$page_content = include_template('lot.php', ['categories' => $categories, 'lots' => $lots]);
+}
+}
 
 $layout_content = include_template('layout.php', [
     'title' => $title,
