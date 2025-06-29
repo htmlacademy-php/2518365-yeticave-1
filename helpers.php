@@ -187,3 +187,20 @@ function get_dt_range(string $date): array
 
     return [$hours, $minutes];
 }
+
+/**
+ * Выполняет SQL запрос
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ *
+ * @return array Данные в формате ассоциативного массива
+ */
+function get_arr($link, $sql): array
+{
+    $result = mysqli_query($link, $sql);
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return mysqli_error($link);
+}

@@ -11,45 +11,54 @@ declare(strict_types=1);
 
 require_once 'helpers.php';
 require_once 'init.php';
+require_once 'models/category.php';
+require_once 'models/lot.php';
 
 $title = 'Лот';
 $is_auth = rand(0, 1);
 $user_name = 'Алексей';
 
-if (!$link) {
-    $page_content = include_template('error.php', ['error' => mysqli_connect_error()]);
-}
-$sql = 'SELECT * FROM categories';
-if (!(mysqli_query($link, $sql))) {
-    $page_content = include_template('error.php', ['error' => mysqli_error($link)]);
-}
-$categories = mysqli_fetch_all(mysqli_query($link, $sql), MYSQLI_ASSOC);
+$categories = get_categories($link);
 
 if (!isset($_GET['id'])) {
   $page_content = include_template('404.php', ['categories' => $categories]);
-}
-else {
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
-$sql = "SELECT l.*, c.name as category_name FROM lots l JOIN categories c ON l.category_id = c.id WHERE l.id = $id";
-if (!(mysqli_query($link, $sql))) {
-    $page_content = include_template('error.php', ['error' => mysqli_error($link)]);
-}
-$lots = mysqli_fetch_all(mysqli_query($link, $sql), MYSQLI_ASSOC);
-if (empty($lots)) {
-    $page_content = include_template('404.php', ['categories' => $categories]);
-}
-else {
-$page_content = include_template('lot.php', ['categories' => $categories, 'lots' => $lots]);
-}
-}
-
-$layout_content = include_template('layout.php', [
+  $layout_content = include_template('layout.php', [
     'title' => $title,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'categories' => $categories,
     'page_content' => $page_content
 ]);
-
-print($layout_content);
+    print($layout_content);
+    die();
+}
+else {
+    $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        if ($id !== null && $id !== false) {
+            $lots = get_lot_by_id($link, $id);
+            if (empty($lots)) {
+                $page_content = include_template('404.php', ['categories' => $categories]);
+                $layout_content = include_template('layout.php', [
+                'title' => $title,
+                'is_auth' => $is_auth,
+                'user_name' => $user_name,
+                'categories' => $categories,
+                'page_content' => $page_content
+                ]);
+                print($layout_content);
+                die();
+            }
+            else {
+                $page_content = include_template('lot.php', ['categories' => $categories, 'lots' => $lots]);
+                $layout_content = include_template('layout.php', [
+                'title' => $title,
+                'is_auth' => $is_auth,
+                'user_name' => $user_name,
+                'categories' => $categories,
+                'page_content' => $page_content
+                ]);
+                print($layout_content);
+                die();
+            }
+    }
+}
