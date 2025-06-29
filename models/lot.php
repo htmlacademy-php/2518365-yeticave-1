@@ -34,8 +34,11 @@ function get_lot_by_id($link, $id): array
     $sql = <<<QUERY
         SELECT l.*, c.name as category_name FROM lots l
         JOIN categories c ON l.category_id = c.id
-        WHERE l.id = $id
+        WHERE l.id = ?
     QUERY;
-
-    return get_arr($link, $sql);
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
