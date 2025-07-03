@@ -22,11 +22,11 @@ $user_name = 'Алексей';
 $categories = get_categories($link);
 $categories_ids = [];
 $categories_ids = array_column($categories, 'id');
-var_dump($categories_ids);
+
+$page_content = include_template('add.php', ['categories' => $categories]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['name', 'description', 'start_price', 'bet_step', 'date_end', 'category_id'];
-	$errors = [];
 
     $rules = [
         'category_id' => function($value) use ($categories_ids) {
@@ -57,58 +57,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'date_end' => FILTER_DEFAULT,
         'category_id' => FILTER_DEFAULT], true);
 
-    foreach ($lot as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errors[$key] = $rule($value);
-        }
+    $errors = [];
 
-        if (in_array($key, $required) && empty($value)) {
-            $errors[$key] = "Поле $key надо заполнить";
-        }
+    $errors = validate_value($required, $rules, $lot, $errors);
+
+    if (empty($_FILES['img']['name'])) {
+        $errors['file'] = 'Вы не загрузили файл';
     }
 
-    $errors = array_filter($errors);
-
     if (!empty($_FILES['img']['name'])) {
-		$tmp_name = $_FILES['img']['tmp_name'];
+        $tmp_name = $_FILES['img']['tmp_name'];
         $file_type = mime_content_type($tmp_name);
 
-        if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
-			$img = $_FILES['img']['name'];
+        if ($file_type !== 'image/jpeg' && $file_type !== 'image/png') {
+            $errors['file'] = 'Загрузите картинку в формате PNG, JPG или JPEG';
+        }
+
+        if (!isset($errors['file'])) {
+            $img = $_FILES['img']['name'];
             $extension = pathinfo($img, PATHINFO_EXTENSION);
             $filename = uniqid() . '.' . $extension;
             move_uploaded_file($tmp_name, 'uploads/' . $filename);
-			$lot['img'] = $filename;
-		}
-        else {
-			$errors['file'] = 'Загрузите картинку в формате PNG, IPG или JPEG';
-		}
-	}
-    	else {
-		$errors['file'] = 'Вы не загрузили файл';
-	}
-    if (count($errors)) {
-		$page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
-	}
-    else {
-        $sql = 'INSERT INTO lots (name, category_id, description, img, start_price, date_end, bet_step, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
-        var_dump($lot);
-        $stmt = db_get_prepare_stmt($link, $sql, $lot);
-        $res = mysqli_stmt_execute($stmt);
-
-        if ($res) {
-            $lot_id = mysqli_insert_id($link);
-
-            header("Location: lot.php?id=" . $lot_id);
+            $lot['img'] = 'uploads/' . $filename;
         }
-        else {
-            die (mysqli_error($link));
-        }
-	}
-}
-else {
-	$page_content = include_template('add.php', ['categories' => $categories]);
+    }
+
+    if (!count($errors)) {
+        add_lot($link, $lot);
+    }
+
+    $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
 }
 
 $layout_content = include_template('layout.php', [

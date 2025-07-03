@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Валидирует ID категории
+ *
+ * @param $name Поле ввода
+ *
+ * @return Отфильтрованное поле ввода;
+ */
 function get_post_value($name) {
     return filter_input(INPUT_POST, $name);
 }
@@ -75,4 +82,28 @@ function validate_date(string $date) {
         return "Указанная дата должна быть больше текущей даты, хотя бы на один день";
     }
     return null;
+}
+
+/**
+ * Проверяет незаполненные поля
+ *
+ * @param array $required Обязательные поля к заполнению
+ * @param array $rules Массив из функции-помощников для валидации отдельных полей
+ * @param array $lot Список лотов
+ *
+ * @return array $errors Список ошибок
+ */
+function validate_value($required, $rules, $lot) {
+    foreach ($lot as $key => $value) {
+        if (isset($rules[$key])) {
+            $rule = $rules[$key];
+            $errors[$key] = $rule($value);
+        }
+
+        if (in_array($key, $required) && empty($value)) {
+            $errors[$key] = "Поле $key надо заполнить";
+        }
+    }
+
+    return array_filter($errors);
 }
