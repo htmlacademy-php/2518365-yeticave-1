@@ -42,3 +42,26 @@ function get_lot_by_id($link, $id): array
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
+
+/**
+ * Добавляет лот и ID к нему
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param array $lot Лот
+ * @return $lot_id ID для нового лота
+ */
+function add_lot($link, $lot) {
+    $sql = <<<QUERY
+        INSERT INTO lots (name, description, start_price, bet_step, date_end, category_id, img, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+    QUERY;
+
+    $stmt = db_get_prepare_stmt($link, $sql, $lot);
+    $res = mysqli_stmt_execute($stmt);
+
+    if ($res) {
+        $lot_id = mysqli_insert_id($link);
+        return header("Location: lot.php?id=" . $lot_id);
+    }
+        die (mysqli_error($link));
+}
