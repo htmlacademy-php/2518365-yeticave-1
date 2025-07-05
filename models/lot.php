@@ -61,9 +61,7 @@ function add_lot($link, $lot) {
 
     if ($res) {
         $lot_id = mysqli_insert_id($link);
-        header("Location: lot.php?id=" . $lot_id);
+        return header("Location: lot.php?id=" . $lot_id);
     }
-    else {
         die (mysqli_error($link));
-    }
 }
