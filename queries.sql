@@ -8,7 +8,7 @@ VALUES ('Доски и лыжи', 'boards'),
        ('Разное', 'other');
 
 -- Добавление пользователей
-INSERT INTO users (email, name, password_hash, contacts)
+INSERT INTO users (email, name, password, message)
 VALUES ('test@yeticave.ru', 'Петр', '$2y$10$qSbAVpjvxewzDSspCzBoGOPqSZS7Nww.7F68c.NVyHTIdQyrEus76', 'Пользователь 1'),
        ('example@yeticave.ru', 'Екатерина', '$2y$10$UKq1J13eEhojujHFFSsfB.sLyAOv1N7DaA70bnSTSyhotTls2H0m6', 'Пользователь 2');
 

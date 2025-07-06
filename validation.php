@@ -27,6 +27,21 @@ function validate_category($id, $allowed_list) {
 }
 
 /**
+ * Валидирует email
+ *
+ * @param $value Полученное значение
+ *
+ * @return "Введите корректный email" | null;
+ */
+function validate_email($value) {
+    if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+        return "Введите корректный email";
+    }
+    return null;
+}
+
+
+/**
  * Валидирует вводимую длину символов
  *
  * @param $value Полученное значение
@@ -89,12 +104,13 @@ function validate_date(string $date) {
  *
  * @param array $required Обязательные поля к заполнению
  * @param array $rules Массив из функции-помощников для валидации отдельных полей
- * @param array $lot Список лотов
+ * @param array $array Список полей
+ * @param array $errors Пустой массив для списка ошибок
  *
  * @return array $errors Список ошибок
  */
-function validate_value($required, $rules, $lot) {
-    foreach ($lot as $key => $value) {
+function validate_value($required, $rules, $array, $errors) {
+    foreach ($array as $key => $value) {
         if (isset($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule($value);
