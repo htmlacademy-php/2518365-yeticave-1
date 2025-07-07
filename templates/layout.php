@@ -44,8 +44,8 @@ declare(strict_types=1);
             </div>
         <?php else: ?>
             <ul class="user-menu__list">
-                <li class="user-menu__item"><a href="#">Регистрация</a></li>
-                <li class="user-menu__item"><a href="#">Вход</a></li>
+                <li class="user-menu__item"><a href="/sign-up.php">Регистрация</a></li>
+                <li class="user-menu__item"><a href="/login.php">Вход</a></li>
             </ul>
         <?php endif; ?>
 

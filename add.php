@@ -25,7 +25,7 @@ $categories_ids = array_column($categories, 'id');
 
 $page_content = include_template('add.php', ['categories' => $categories]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['name', 'description', 'start_price', 'bet_step', 'date_end', 'category_id'];
 
     $rules = [
