@@ -15,8 +15,6 @@ require_once 'models/category.php';
 require_once 'models/lot.php';
 
 $title = 'Лот';
-$is_auth = rand(0, 1);
-$user_name = 'Алексей';
 
 $categories = get_categories($link);
 
@@ -24,8 +22,6 @@ if (!isset($_GET['id'])) {
   $page_content = include_template('404.php', ['categories' => $categories]);
   $layout_content = include_template('layout.php', [
     'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'categories' => $categories,
     'page_content' => $page_content
 ]);
@@ -38,8 +34,6 @@ $lots = get_lot_by_id($link, $id);
         $page_content = include_template('404.php', ['categories' => $categories]);
         $layout_content = include_template('layout.php', [
         'title' => $title,
-        'is_auth' => $is_auth,
-        'user_name' => $user_name,
         'categories' => $categories,
         'page_content' => $page_content
         ]);
@@ -49,8 +43,6 @@ $lots = get_lot_by_id($link, $id);
     $page_content = include_template('lot.php', ['categories' => $categories, 'lots' => $lots]);
     $layout_content = include_template('layout.php', [
     'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'categories' => $categories,
     'page_content' => $page_content
     ]);

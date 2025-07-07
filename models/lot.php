@@ -51,9 +51,10 @@ function get_lot_by_id($link, $id): array
  * @return $lot_id ID для нового лота
  */
 function add_lot($link, $lot) {
+    $lot['user_id'] = $_SESSION['user']['id'];
     $sql = <<<QUERY
         INSERT INTO lots (name, description, start_price, bet_step, date_end, category_id, img, user_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, $lot);

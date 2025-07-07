@@ -15,9 +15,12 @@ require_once 'models/category.php';
 require_once 'models/lot.php';
 require_once 'validation.php';
 
+if(!isset($_SESSION['user'])){
+    header('HTTP/1.0 403 Forbidden');
+    die();
+}
+
 $title = 'Добавление лота';
-$is_auth = rand(0, 1);
-$user_name = 'Алексей';
 
 $categories = get_categories($link);
 $categories_ids = [];
@@ -91,10 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $layout_content = include_template('layout.php', [
     'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'categories' => $categories,
     'page_content' => $page_content
 ]);
 
 print($layout_content);
+
