@@ -15,8 +15,6 @@ require_once 'models/category.php';
 require_once 'models/lot.php';
 
 $title = 'Главная';
-$is_auth = rand(0, 1);
-$user_name = 'Алексей';
 
 $categories = get_categories($link);
 $lots = get_new_lots($link);
@@ -28,8 +26,6 @@ $page_content = include_template('main.php', [
 
 $layout_content = include_template('layout.php', [
     'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'categories' => $categories,
     'page_content' => $page_content
 ]);

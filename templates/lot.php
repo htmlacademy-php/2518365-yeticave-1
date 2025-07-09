@@ -33,6 +33,7 @@ declare(strict_types=1);
           <p class="lot-item__description"><?=htmlspecialchars($lot['description'] ?? '');?></p>
         </div>
         <div class="lot-item__right">
+          <?php if (isset($_SESSION['user'])): ?>
           <div class="lot-item__state">
             <?php if (isset($lot['date_end'])):
                 get_dt_range($lot['date_end'])
@@ -51,6 +52,7 @@ declare(strict_types=1);
               </div>
             </div>
           </div>
+          <?php endif; ?>
         </div>
       </div>
     </section>

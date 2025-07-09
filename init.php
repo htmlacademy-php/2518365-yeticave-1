@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 session_start();
 
+if (session_start() === true) {
+
 define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
 define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));
 
@@ -21,3 +23,5 @@ if (!$link) {
 
 $categories = [];
 $page_content = '';
+
+}

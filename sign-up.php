@@ -14,9 +14,12 @@ require_once 'models/category.php';
 require_once 'models/user.php';
 require_once 'validation.php';
 
+if(isset($_SESSION['user'])){
+    header('HTTP/1.0 403 Forbidden');
+    die();
+}
+
 $title = 'Регистрация';
-$is_auth = rand(0, 1);
-$user_name = 'Алексей';
 
 $categories = get_categories($link);
 
@@ -41,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     ];
 
-    $user = filter_input_array(INPUT_POST, [
+    $form = filter_input_array(INPUT_POST, [
         'email' => FILTER_DEFAULT,
         'password' => FILTER_DEFAULT,
         'name' => FILTER_DEFAULT,
@@ -49,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
-    $errors = validate_value($required, $rules, $user, $errors);
+    $errors = validate_value($required, $rules, $form, $errors);
 
     if (!count($errors)) {
-        $email = mysqli_real_escape_string($link, $user['email']);
+        $email = mysqli_real_escape_string($link, $form['email']);
         $sql = "SELECT id FROM users WHERE email = '$email'";
         $res = mysqli_query($link, $sql);
 
@@ -61,18 +64,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $user['password'] = password_hash($user['password'], PASSWORD_DEFAULT);
-            add_user($link, $user);
+            $form['password'] = password_hash($form['password'], PASSWORD_DEFAULT);
+            add_user($link, $form);
         }
     }
 
-    $page_content = include_template('sign-up.php', ['user' => $user, 'errors' => $errors, 'categories' => $categories]);
+    $page_content = include_template('sign-up.php', ['form' => $form, 'errors' => $errors, 'categories' => $categories]);
 }
 
 $layout_content = include_template('layout.php', [
     'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'categories' => $categories,
     'page_content' => $page_content
 ]);
