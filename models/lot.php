@@ -81,10 +81,10 @@ function search_lot($link, $search, $page_items, $offset): array
         JOIN categories c ON l.category_id = c.id
         LEFT JOIN bets b ON l.id = b.lot_id
         WHERE MATCH(l.name, l.description) AGAINST(?)
-        ORDER BY l.created_at DESC LIMIT $page_items OFFSET $offset
+        ORDER BY l.created_at DESC LIMIT ? OFFSET ?
     QUERY;
 
-    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    $stmt = db_get_prepare_stmt($link, $sql, [$search, $page_items, $offset]);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
