@@ -66,3 +66,26 @@ function add_lot($link, $lot) {
     }
         die (mysqli_error($link));
 }
+
+/**
+ * Возвращает список лотов по поиску
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param array $search Текст из поля поиска
+ * @return array Список новых лотов в формате ассоциативного массива
+ */
+function search_lot($link, $search, $page_items, $offset): array
+{
+    $sql = <<<QUERY
+        SELECT l.id, l.name, l.description, l.start_price, l.img, l.date_end, b.price, c.name as category_name FROM lots l
+        JOIN categories c ON l.category_id = c.id
+        LEFT JOIN bets b ON l.id = b.lot_id
+        WHERE MATCH(l.name, l.description) AGAINST(?)
+        ORDER BY l.created_at DESC LIMIT ? OFFSET ?
+    QUERY;
+
+    $stmt = db_get_prepare_stmt($link, $sql, [$search, $page_items, $offset]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
