@@ -15,7 +15,7 @@ declare(strict_types=1);
             <?php if (!empty($categories)): ?>
                 <?php foreach ($categories as $category): ?>
                 <li class="promo__item promo__item--<?=isset($category['symbol_code']) ? $category['symbol_code'] : '';?>">
-                    <a class="promo__link" href="pages/all-lots.html"><?=$category['name'] ?? '';?></a>
+                    <a class="promo__link" href="/lots.php"><?=$category['name'] ?? '';?></a>
                 </li>
                 <?php endforeach; ?>
             <?php endif; ?>
