@@ -7,27 +7,25 @@ declare(strict_types=1);
  * @var array<int,array{name: string, category: string, price: int, img: string, date: string} $lots Список лотов
  */
 ?>
-<main class="container">
-    <section class="promo">
-        <h2 class="promo__title">Нужен стафф для катки?</h2>
-        <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
-        <ul class="promo__list">
+
+<main>
+    <nav class="nav">
+        <ul class="nav__list container">
             <?php if (!empty($categories)): ?>
                 <?php foreach ($categories as $category): ?>
-                <li class="promo__item promo__item--<?=isset($category['symbol_code']) ? $category['symbol_code'] : '';?>">
-                    <a class="promo__link" href="all-lots.php?id=<?=$category['id'] ?? '';?>"><?=$category['name'] ?? '';?></a>
-                </li>
+                    <li class="nav__item">
+                        <a href="all-lots.php?id=<?=$category['id'] ?? '';?>"><?=$category['name'] ?? '';?></a>
+                    </li>
                 <?php endforeach; ?>
             <?php endif; ?>
         </ul>
-    </section>
-    <section class="lots">
-        <div class="lots__header">
-            <h2>Открытые лоты</h2>
-        </div>
-        <ul class="lots__list">
-            <?php if (!empty($lots)): ?>
-                <?php foreach ($lots as $lot): ?>
+        </nav>
+        <div class="container">
+           <section class="lots">
+             <h2>Все лоты в категории <span>«<?=$category_name;?>»</span></h2>
+             <ul class="lots__list">
+               <?php if (!empty($lots)): ?>
+                  <?php foreach ($lots as $lot): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?=$lot['img'] ?? '';?>" width="350" height="260" alt="<?=htmlspecialchars($lot['name'] ?? '');?>">
@@ -52,6 +50,18 @@ declare(strict_types=1);
             </li>
             <?php endforeach; ?>
             <?php endif; ?>
-        </ul>
-    </section>
-</main>
+             </ul>
+           </section>
+           <?php if($pages_count > 1): ?>
+             <ul class="pagination-list">
+               <li class="pagination-item pagination-item-prev"><a <?php if ($cur_page != 1): ?> href="/all-lots.php?id=<?=$id?>&page=<?=$cur_page-1?>" <?php endif; ?>>Назад</a></li>
+                   <?php foreach ($pages as $page): ?>
+                       <li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>">
+                           <a href="/all-lots.php?id=<?=$id?>&page=<?=$page;?>"><?=$page;?></a>
+                       </li>
+                   <?php endforeach; ?>
+               <li class="pagination-item pagination-item-next"><a <?php if ($cur_page != $pages_count): ?> href="/all-lots.php?id=<?=$id?>&page=<?=$cur_page+1?>" <?php endif; ?>>Вперед</a></li>
+             </ul>
+           <?php endif; ?>
+           </div>
+  </main>
