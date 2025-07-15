@@ -13,6 +13,9 @@ require_once 'helpers.php';
 require_once 'init.php';
 require_once 'models/category.php';
 require_once 'models/lot.php';
+require_once 'models/user.php';
+require_once 'models/bet.php';
+require_once 'validation.php';
 
 $title = 'Лот';
 
@@ -28,6 +31,7 @@ if (!isset($_GET['id'])) {
     print($layout_content);
     die();
 }
+
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $lots = get_lot_by_id($link, $id);
     if (empty($lots)) {
@@ -40,12 +44,70 @@ $lots = get_lot_by_id($link, $id);
         print($layout_content);
         die();
     }
-    $page_content = include_template('lot.php', ['categories' => $categories, 'lots' => $lots]);
+
+$user_id = (int)$_SESSION['user']['id'] ?? null;
+
+foreach ($lots as $lot) {
+    $start_price = $lot['start_price'];
+    $bet_step = $lot['bet_step'];
+    $lot_id = $lot['id'];
+};
+
+$count_bets = count_bets($link, $lot_id);
+
+$bets = show_bets($link, $lot_id);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['price'])){
+    $price = $_POST['price'];
+    }
+    $required = ['price'];
+
+    $rules = [
+        'price' => function($value) use ($start_price, $bet_step) {
+            return validate_bet($value, $start_price, $bet_step);
+        }
+    ];
+
+    $form = filter_input_array(INPUT_POST, [
+        'price' => FILTER_DEFAULT], true);
+
+    $errors = [];
+
+    $errors = validate_value($required, $rules, $form, $errors);
+
+    if (!count($errors)) {
+        add_bet($link, $price, $user_id, $lot_id);
+        update_price($link, $price, $lot_id);
+    }
+
+    $page_content = include_template('lot.php', [
+        'lots' => $lots,
+        'form' => $form,
+        'errors' => $errors,
+        'count_bets' => $count_bets,
+        'bets' => $bets,
+        'categories' => $categories
+    ]);
     $layout_content = include_template('layout.php', [
     'title' => $title,
     'categories' => $categories,
     'page_content' => $page_content
     ]);
     print($layout_content);
-    die();
+
+}
+
+$page_content = include_template('lot.php', [
+    'count_bets' => $count_bets,
+    'bets' => $bets,
+    'categories' => $categories,
+    'lots' => $lots
+    ]);
+$layout_content = include_template('layout.php', [
+    'title' => $title,
+    'categories' => $categories,
+    'page_content' => $page_content
+    ]);
+    print($layout_content);
 

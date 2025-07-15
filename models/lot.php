@@ -14,9 +14,8 @@ require_once 'init.php';
 function get_new_lots($link): array
 {
     $sql = <<<QUERY
-        SELECT l.id, l.name, l.start_price, l.img, l.date_end, b.price, c.name as category_name FROM lots l
+        SELECT l.id, l.name, l.start_price, l.img, l.date_end, c.name as category_name FROM lots l
         JOIN categories c ON l.category_id = c.id
-        LEFT JOIN bets b ON l.id = b.lot_id
         ORDER BY l.created_at DESC LIMIT 6
     QUERY;
 
@@ -88,4 +87,45 @@ function search_lot($link, $search, $page_items, $offset): array
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+/**
+ * Возвращает список лотов по категории
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param int $id ID категории
+ * @return array Список новых лотов в формате ассоциативного массива
+ */
+function get_lots_by_category($link, $id, $page_items, $offset): array
+{
+    $sql = <<<QUERY
+        SELECT l.*, c.name as category_name FROM lots l
+        JOIN categories c ON l.category_id = c.id
+        WHERE l.category_id = ?
+        ORDER BY l.created_at DESC LIMIT ? OFFSET ?
+    QUERY;
+
+    $stmt = db_get_prepare_stmt($link, $sql, [$id, $page_items, $offset]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+/**
+ * Подсчитывает кол-во ставок для лота
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param int $lot_id Значение ID лота
+ * @return int Кол-во ставок
+ */
+function count_lots_by_category($link, $id) {
+    $sql = <<<QUERY
+        SELECT COUNT(*) as cnt FROM lots
+        WHERE category_id = ?
+    QUERY;
+
+    $stmt = db_get_prepare_stmt($link, $sql, [$id]);
+    $res = mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_assoc($res)['cnt'];
 }

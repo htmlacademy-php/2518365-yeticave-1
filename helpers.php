@@ -204,3 +204,32 @@ function get_arr($link, $sql): array
     }
     return mysqli_error($link);
 }
+
+/**
+ * Возвращает человеческое представление времени с момента $datetime.
+ *
+ * @param string $datetime Время в формате 'Y-m-d H:i:s'
+ * @return string
+ */
+function time_ago($datetime) {
+    $timestamp = strtotime($datetime);
+    $diff = time() - $timestamp;
+
+    if ($diff < 60) {
+        // Меньше минуты
+        $seconds = $diff;
+        return $seconds . ' ' . get_noun_plural_form((int)$seconds, 'секунда', 'секунды', 'секунд') . ' назад';
+    } elseif ($diff < 3600) {
+        // Менее часа
+        $minutes = floor($diff / 60);
+        return $minutes . ' ' . get_noun_plural_form((int)$minutes, 'минута', 'минуты', 'минут') . ' назад';
+    } elseif ($diff < 86400) {
+        // Менее суток
+        $hours = floor($diff / 3600);
+        return $hours . ' ' . get_noun_plural_form((int)$hours, 'час', 'часа', 'часов') . ' назад';
+    } else {
+        // Больше суток
+        $days = floor($diff / 86400);
+        return $days . ' ' . get_noun_plural_form((int)$days, 'день', 'дня', 'дней') . ' назад';
+    }
+}

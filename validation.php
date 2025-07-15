@@ -123,3 +123,24 @@ function validate_value($required, $rules, $array, $errors) {
 
     return array_filter($errors);
 }
+
+/**
+ * Валидирует является ли значение ставки целым положительным числом
+ * и больше или равно, чем текущая цена лота + шаг ставки.
+ *
+ * @param $value Полученное значение
+ * @param $start_price Текущая цена
+ * @param $bet_step Шаг ставки
+ *
+ * @return "Значение $value должно быть числом больше нуля" | null;
+ */
+
+function validate_bet($value, $start_price, $bet_step) {
+    if (filter_var($value, FILTER_VALIDATE_INT) === false || intval($value) <= 0) {
+        return "Значение должно быть целым положительным числом.";
+    }
+    if (intval($value) <= $start_price + $bet_step) {
+        return "Значение должно быть больше или равно текущей цене лота + шаг ставки.";
+    }
+    return null;
+}
