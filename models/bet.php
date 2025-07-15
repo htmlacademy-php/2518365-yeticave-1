@@ -91,3 +91,26 @@ function show_bets($link, $lot_id) {
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
+
+/**
+ * Показывает историю ставок для конкретного пользователя
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param int $user_id Значение ID пользователя
+ * @return array Список ставок пользователя
+ */
+function get_bets($link, $user_id) {
+    $sql = <<<QUERY
+        SELECT l.name as lot_name, l.start_price, l.date_end, l.img, l.winner_id, u.message, c.name as category_name, b.created_at, b.lot_id FROM bets b
+        JOIN lots l ON l.id = b.lot_id
+        JOIN categories c ON l.category_id = c.id
+        JOIN users u ON l.user_id = u.id
+        WHERE b.user_id = ?
+        ORDER BY b.created_at DESC
+    QUERY;
+
+    $stmt = db_get_prepare_stmt($link, $sql, [$user_id]);
+    $res = mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}

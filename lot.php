@@ -45,11 +45,12 @@ $lots = get_lot_by_id($link, $id);
         die();
     }
 
+$user_id = (int)$_SESSION['user']['id'] ?? null;
+
 foreach ($lots as $lot) {
     $start_price = $lot['start_price'];
     $bet_step = $lot['bet_step'];
     $lot_id = $lot['id'];
-    $user_id = $lot['user_id'];
 };
 
 $count_bets = count_bets($link, $lot_id);
