@@ -1,0 +1,14 @@
+{
+    "name": "kiselev-academy/yeticave",
+    "description": "yeticave",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kiselev Alex"
+        }
+    ],
+    "require": {
+        "symfony/mailer": "^7.3"
+    }
+}

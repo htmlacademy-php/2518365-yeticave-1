@@ -24,7 +24,7 @@ if (!isset($_GET['id'])) {
 $id = (int)$_GET['id'];
 
 $cur_page = 1;
-if (isset($_GET['page'])){
+if (isset($_GET['page'])) {
     $cur_page = $_GET['page'];
 }
 
@@ -49,12 +49,12 @@ $page_content = include_template('all-lots.php', [
     'pages' => $pages,
     'pages_count' => $pages_count,
     'cur_page' => $cur_page
-    ]);
+]);
 
 $layout_content = include_template('layout.php', [
     'title' => $title,
     'categories' => $categories,
     'page_content' => $page_content
-    ]);
+]);
 
 print($layout_content);

@@ -2,6 +2,7 @@
 
 /**
  * @var string[] $categories Список категорий
+ * @var string $title Заголовок страницы
  * @var array<int,array{name: string, category: string, price: int, img: string} $lots Список лотов
  */
 
@@ -29,7 +30,7 @@ if ($search === '') {
 }
 
 $cur_page = 1;
-if (isset($_GET['page'])){
+if (isset($_GET['page'])) {
     $cur_page = $_GET['page'];
 }
 
@@ -50,12 +51,12 @@ $page_content = include_template('search.php', [
     'pages' => $pages,
     'pages_count' => $pages_count,
     'cur_page' => $cur_page
-    ]);
+]);
 
 $layout_content = include_template('layout.php', [
     'title' => $title,
     'categories' => $categories,
     'page_content' => $page_content
-    ]);
+]);
 
 print($layout_content);

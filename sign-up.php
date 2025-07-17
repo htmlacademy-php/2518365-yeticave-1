@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @var bool $is_auth Флаг авторизации
- * @var string $user_name Имя пользователя
+ * @var string $title Заголовок страницы
  * @var string[] $categories Список категорий
  */
 
@@ -14,7 +13,7 @@ require_once 'models/category.php';
 require_once 'models/user.php';
 require_once 'validation.php';
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     header('HTTP/1.0 403 Forbidden');
     die();
 }
@@ -30,16 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['email', 'password', 'name', 'message'];
 
     $rules = [
-        'email' => function($value) {
+        'email' => function ($value) {
             return validate_email($value);
         },
-        'password' => function($value) {
+        'password' => function ($value) {
             return validate_length($value, 8, 64);
         },
-        'name' => function($value) {
+        'name' => function ($value) {
             return validate_length($value, 8, 128);
         },
-        'message' => function($value) {
+        'message' => function ($value) {
             return validate_length($value, 8, 128);
         }
     ];
@@ -48,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'email' => FILTER_DEFAULT,
         'password' => FILTER_DEFAULT,
         'name' => FILTER_DEFAULT,
-        'message' => FILTER_DEFAULT], true);
+        'message' => FILTER_DEFAULT
+    ], true);
 
     $errors = [];
 
@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $page_content = include_template('sign-up.php', ['form' => $form, 'errors' => $errors, 'categories' => $categories]);
+    $page_content = include_template('sign-up.php',
+        ['form' => $form, 'errors' => $errors, 'categories' => $categories]);
 }
 
 $layout_content = include_template('layout.php', [
