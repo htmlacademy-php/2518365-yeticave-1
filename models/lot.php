@@ -26,6 +26,7 @@ function get_new_lots($link): array
  * Возвращает список лотов по ID
  *
  * @param $link mysqli Ресурс соединения
+ * @param int $id ID лота
  * @return array Список лотов по ID в формате ассоциативного массива
  */
 function get_lot_by_id($link, $id): array
@@ -49,7 +50,8 @@ function get_lot_by_id($link, $id): array
  * @param array $lot Лот
  * @return $lot_id ID для нового лота
  */
-function add_lot($link, $lot) {
+function add_lot($link, $lot)
+{
     $lot['user_id'] = $_SESSION['user']['id'];
     $sql = <<<QUERY
         INSERT INTO lots (name, description, start_price, bet_step, date_end, category_id, img, user_id)
@@ -57,20 +59,23 @@ function add_lot($link, $lot) {
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, $lot);
-    $res = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
 
     if ($res) {
         $lot_id = mysqli_insert_id($link);
         return header("Location: lot.php?id=" . $lot_id);
     }
-        die (mysqli_error($link));
+    die (mysqli_error($link));
 }
 
 /**
  * Возвращает список лотов по поиску
  *
  * @param $link mysqli Ресурс соединения
- * @param array $search Текст из поля поиска
+ * @param string $search Текст из поля поиска
+ * @param int $page_items Кол-во записей в результате
+ * @param int $offset Смещение выборки
  * @return array Список новых лотов в формате ассоциативного массива
  */
 function search_lot($link, $search, $page_items, $offset): array
@@ -94,6 +99,8 @@ function search_lot($link, $search, $page_items, $offset): array
  *
  * @param $link mysqli Ресурс соединения
  * @param int $id ID категории
+ * @param int $page_items Кол-во записей в результате
+ * @param int $offset Смещение выборки
  * @return array Список новых лотов в формате ассоциативного массива
  */
 function get_lots_by_category($link, $id, $page_items, $offset): array
@@ -115,10 +122,11 @@ function get_lots_by_category($link, $id, $page_items, $offset): array
  * Подсчитывает кол-во ставок для лота
  *
  * @param $link mysqli Ресурс соединения
- * @param int $lot_id Значение ID лота
+ * @param int $id Значение ID лота
  * @return int Кол-во ставок
  */
-function count_lots_by_category($link, $id) {
+function count_lots_by_category($link, $id)
+{
     $sql = <<<QUERY
         SELECT COUNT(*) as cnt FROM lots
         WHERE category_id = ?
@@ -128,4 +136,23 @@ function count_lots_by_category($link, $id) {
     $res = mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_assoc($res)['cnt'];
+}
+
+/**
+ * Добавляет флаг победителя в лоте
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param int $winner_id ID победителя
+ * @param int $lot_id ID лота
+ * @return int Добавления ID победителя
+ */
+function add_winner_on_db($link, $winner_id, $lot_id): array
+{
+    $sql = <<<QUERY
+        UPDATE lots SET winner_id=? WHERE id=?
+    QUERY;
+    $stmt = db_get_prepare_stmt($link, $sql, [$winner_id, $lot_id]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }

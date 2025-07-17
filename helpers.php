@@ -16,7 +16,8 @@ declare(strict_types=1);
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -32,7 +33,8 @@ function is_date_valid(string $date) : bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -49,12 +51,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -99,9 +103,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -129,7 +133,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -154,8 +159,8 @@ function include_template($name, array $data = []) {
  */
 function get_price(int $price): string
 {
-    if ($price >= 1000){
-    return number_format($price, 0, '.', ' ') . ' ₽';
+    if ($price >= 1000) {
+        return number_format($price, 0, '.', ' ') . ' ₽';
     }
     return $price . ' ₽';
 }
@@ -211,7 +216,8 @@ function get_arr($link, $sql): array
  * @param string $datetime Время в формате 'Y-m-d H:i:s'
  * @return string
  */
-function time_ago($datetime) {
+function time_ago($datetime)
+{
     $timestamp = strtotime($datetime);
     $diff = time() - $timestamp;
 
@@ -232,4 +238,20 @@ function time_ago($datetime) {
         $days = floor($diff / 86400);
         return $days . ' ' . get_noun_plural_form((int)$days, 'день', 'дня', 'дней') . ' назад';
     }
+}
+
+/**
+ * Возвращает массив из результата запроса
+ * @param $result Результат запроса к базе данных
+ * @return array Возвращает массив
+ */
+function get_arrow($result)
+{
+    $row = mysqli_num_rows($result);
+    if ($row === 0 || $row === 1) {
+        $arrow = mysqli_fetch_assoc($result);
+    } elseif ($row > 1) {
+        $arrow = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $arrow;
 }

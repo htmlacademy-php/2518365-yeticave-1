@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @var bool $is_auth Флаг авторизации
- * @var string $user_name Имя пользователя
+ * @var string $title Заголовок страницы
  * @var string[] $categories Список категорий
  */
 
@@ -15,12 +14,12 @@ require_once 'models/lot.php';
 require_once 'models/user.php';
 require_once 'models/bet.php';
 
-if(!isset($_SESSION['user'])){
+if (!isset($_SESSION['user'])) {
     header('HTTP/1.0 403 Forbidden');
     die();
 }
 
-$user_id = (int)$_SESSION['user']['id'] ?? null;
+$user_id = (int)($_SESSION['user']['id'] ?? 0);
 
 $title = 'Мои ставки';
 
