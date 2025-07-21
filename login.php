@@ -52,12 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-    if (!count($errors) and $user) {
-        if (!password_verify($form['password'], $user['password'])) {
-            $errors['password'] = 'Неверный пароль';
-        }
-        $_SESSION['user'] = $user;
+    if (!count($errors) && $user && !password_verify($form['password'], $user['password'])) {
+        $errors['password'] = 'Неверный пароль';
     }
+
+    $_SESSION['user'] = $user;
 
     if (!$user) {
         $errors['email'] = 'Такой пользователь не найден';

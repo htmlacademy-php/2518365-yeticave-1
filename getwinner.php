@@ -53,9 +53,4 @@ if (!empty($bets)) {
     $mailer = new Mailer($transport);
     $result = $mailer->send($message);
 
-    if ($result) {
-        print("Рассылка успешно отправлена");
-    } else {
-        print("Не удалось отправить рассылку");
-    }
 }
