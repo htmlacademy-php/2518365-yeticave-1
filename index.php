@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @var bool $is_auth Флаг авторизации
- * @var string $user_name Имя пользователя
+ * @var string $title Заголовок страницы
  * @var string[] $categories Список категорий
  * @var array<int,array{name: string, category: string, price: int, img: string} $lots Список лотов
  */
@@ -13,6 +12,7 @@ require_once 'helpers.php';
 require_once 'init.php';
 require_once 'models/category.php';
 require_once 'models/lot.php';
+require_once 'getwinner.php';
 
 $title = 'Главная';
 

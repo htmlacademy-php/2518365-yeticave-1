@@ -15,7 +15,7 @@ require_once 'models/category.php';
 require_once 'models/lot.php';
 require_once 'validation.php';
 
-if(!isset($_SESSION['user'])){
+if (!isset($_SESSION['user'])) {
     header('HTTP/1.0 403 Forbidden');
     die();
 }
@@ -32,22 +32,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['name', 'description', 'start_price', 'bet_step', 'date_end', 'category_id'];
 
     $rules = [
-        'category_id' => function($value) use ($categories_ids) {
+        'category_id' => function ($value) use ($categories_ids) {
             return validate_category($value, $categories_ids);
         },
-        'name' => function($value) {
+        'name' => function ($value) {
             return validate_length($value, 8, 128);
         },
-        'description' => function($value) {
+        'description' => function ($value) {
             return validate_length($value, 8, 512);
         },
-        'start_price' => function($value) {
+        'start_price' => function ($value) {
             return validate_integer($value);
         },
-        'bet_step' => function($value) {
+        'bet_step' => function ($value) {
             return validate_integer($value);
         },
-        'date_end' => function($value) {
+        'date_end' => function ($value) {
             return validate_date($value);
         }
     ];
@@ -58,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'start_price' => FILTER_DEFAULT,
         'bet_step' => FILTER_DEFAULT,
         'date_end' => FILTER_DEFAULT,
-        'category_id' => FILTER_DEFAULT], true);
+        'category_id' => FILTER_DEFAULT
+    ], true);
 
     $errors = [];
 

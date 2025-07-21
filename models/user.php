@@ -12,17 +12,19 @@ require_once 'init.php';
  * @param array $user Данные пользователя
  * @return string Переадресация на страницу входа
  */
-function add_user($link, $user) {
+function add_user($link, $user)
+{
     $sql = <<<QUERY
         INSERT INTO users (email, password, name, message)
         VALUES (?, ?, ?, ?)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, $user);
-    $res = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
 
     if ($res) {
         return header("Location: /login.php");
     }
-        die (mysqli_error($link));
+    die (mysqli_error($link));
 }
