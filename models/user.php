@@ -20,11 +20,11 @@ function add_user($link, $user)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, $user);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_stmt_execute($stmt);
 
     if ($res) {
-        return header("Location: /login.php");
+        header("Location: /login.php");
+        exit;
     }
     die (mysqli_error($link));
 }

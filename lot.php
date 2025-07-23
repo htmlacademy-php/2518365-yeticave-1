@@ -45,13 +45,17 @@ if (empty($lots)) {
 }
 
 $user_id = (int)($_SESSION['user']['id'] ?? 0);
+$start_price = 0;
+$bet_step = 0;
+$lot_id = 0;
+$user_lot_id = 0;
 
 foreach ($lots as $lot) {
     $start_price = $lot['start_price'];
     $bet_step = $lot['bet_step'];
     $lot_id = $lot['id'];
     $user_lot_id = $lot['user_id'];
-};
+}
 
 $user_id_last_bet = get_user_by_bet($link, $lot_id);
 

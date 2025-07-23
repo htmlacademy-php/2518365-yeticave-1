@@ -19,6 +19,10 @@ foreach ($lots as $lot) {
     $id = (int)$lot['id'];
 }
 $bets = get_user_by_bet($link, $id);
+$user_name = '';
+$lot_name = '';
+$lot_id = 0;
+$email = '';
 
 if (!empty($bets)) {
     foreach ($bets as $bet) {

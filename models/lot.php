@@ -59,12 +59,12 @@ function add_lot($link, $lot)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, $lot);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_stmt_execute($stmt);
 
     if ($res) {
         $lot_id = mysqli_insert_id($link);
-        return header("Location: lot.php?id=" . $lot_id);
+        header("Location: lot.php?id=" . $lot_id);
+        exit;
     }
     die (mysqli_error($link));
 }

@@ -22,11 +22,11 @@ function add_bet($link, $price, $user_id, $lot_id)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, [$price, $user_id, $lot_id]);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_stmt_execute($stmt);
 
     if ($res) {
-        return header("Refresh: 0");
+        header("Refresh: 0");
+        exit;
     }
     die (mysqli_error($link));
 }
@@ -67,10 +67,10 @@ function update_price($link, $price, $lot_id)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, [$price, $lot_id]);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_stmt_execute($stmt);
     if ($res) {
-        return header("Refresh: 0");
+        header("Refresh: 0");
+        exit;
     }
     die (mysqli_error($link));
 }
@@ -136,8 +136,7 @@ function get_user_by_bet($link, $id)
     QUERY;
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $id);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_stmt_execute($stmt);
     if ($res) {
         return $bets = get_arrow($res);
     }
@@ -160,8 +159,7 @@ function get_winners($link, $lot_id, $winner_id)
         WHERE l.id = ? AND users.id = ?
     QUERY;
     $stmt = db_get_prepare_stmt($link, $sql, [$lot_id, $winner_id]);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
+    $res = mysqli_stmt_execute($stmt);
     if ($res) {
         return $winners = get_arrow($res);
     }
