@@ -37,9 +37,11 @@ $pages = range(1, $pages_count);
 
 $lots = get_lots_by_category($link, $id, $page_items, $offset);
 
+$category_name = '';
+
 foreach ($lots as $lot) {
     $category_name = $lot['category_name'];
-};
+}
 
 $page_content = include_template('all-lots.php', [
     'id' => $id,
