@@ -24,11 +24,9 @@ function add_bet($link, $price, $user_id, $lot_id)
     $stmt = db_get_prepare_stmt($link, $sql, [$price, $user_id, $lot_id]);
     $res = mysqli_stmt_execute($stmt);
 
-    if ($res) {
-        header("Refresh: 0");
-        exit;
+    if (!$res) {
+        die (mysqli_error($link));
     }
-    die (mysqli_error($link));
 }
 
 /**
@@ -117,7 +115,7 @@ function get_bets($link, $user_id)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, [$user_id]);
-    $res = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
@@ -136,9 +134,10 @@ function get_user_by_bet($link, $id)
     QUERY;
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $id);
-    $res = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
     if ($res) {
-        return $bets = get_arrow($res);
+        return get_arrow($res);
     }
     die (mysqli_error($link));
 }
@@ -156,12 +155,13 @@ function get_winners($link, $lot_id, $winner_id)
         SELECT l.id, l.name as lot_name, u.name as user_name, u.email FROM bets b
         JOIN lots l ON b.lot_id = l.id
         JOIN users u ON b.user_id = u.id
-        WHERE l.id = ? AND users.id = ?
+        WHERE l.id = ? AND u.id = ?
     QUERY;
     $stmt = db_get_prepare_stmt($link, $sql, [$lot_id, $winner_id]);
-    $res = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
     if ($res) {
-        return $winners = get_arrow($res);
+        return get_arrow($res);
     }
     die (mysqli_error($link));
 }
