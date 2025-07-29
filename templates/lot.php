@@ -59,7 +59,7 @@ declare(strict_types=1);
                         <?php if (((get_dt_range($lot['date_end']) !== [
                                     '00',
                                     '00'
-                                ]) && ($user_lot_id !== $user_id) && ($user_id_last_bet !== $user_id))): ?>
+                                ]) && ((int)$user_lot_id !== (int)$user_id) && ((int)($user_id_last_bet['user_id'] ?? 0) !== (int)$user_id))): ?>
                             <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post"
                                   enctype="multipart/form-data" autocomplete="off">
                                 <?php $classname = isset($errors['price']) ? "form__item--invalid" : ""; ?>

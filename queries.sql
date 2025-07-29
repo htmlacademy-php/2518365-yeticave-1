@@ -14,11 +14,11 @@ VALUES ('test@yeticave.ru', 'Петр', '$2y$10$qSbAVpjvxewzDSspCzBoGOPqSZS7Nww.
 
 -- Добавление существующего списка объявлений
 INSERT INTO lots (name, category_id, description, img, start_price, date_end, bet_step, user_id)
-VALUES ('2014 Rossignol District Snowboard', 1, '', 'img/lot-1.jpg', 10999, '2025-06-02', 100, 2),
-       ('DC Ply Mens 2016/2017 Snowboard', 1, '', 'img/lot-2.jpg', 15999, '2025-06-03', 200, 1),
-       ('Крепления Union Contact Pro 2015 года размер L/XL', 2, '', 'img/lot-3.jpg', 8000, '2025-06-04', 300, 2),
-       ('Ботинки для сноуборда DC Mutiny Charocal', 3, '', 'img/lot-4.jpg', 10999, '2025-06-05', 400, 1),
-       ('Куртка для сноуборда DC Mutiny Charocal', 4, '', 'img/lot-5.jpg', 7500, '2025-06-06', 500, 2),
+VALUES ('2014 Rossignol District Snowboard', 1, '', 'img/lot-1.jpg', 10999, '2025-07-29', 100, 2),
+       ('DC Ply Mens 2016/2017 Snowboard', 2, '', 'img/lot-2.jpg', 15999, '2025-07-30', 200, 1),
+       ('Крепления Union Contact Pro 2015 года размер L/XL', 3, '', 'img/lot-3.jpg', 8000, '2025-07-31', 300, 2),
+       ('Ботинки для сноуборда DC Mutiny Charocal', 4, '', 'img/lot-4.jpg', 10999, '2025-08-02', 400, 1),
+       ('Куртка для сноуборда DC Mutiny Charocal', 5, '', 'img/lot-5.jpg', 7500, '2025-08-01', 500, 2),
        ('Маска Oakley Canopy', 6, '', 'img/lot-6.jpg', 5400, '2025-06-07', 600, 1);
 
 -- Добавление ставок для любого объявления

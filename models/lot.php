@@ -133,7 +133,7 @@ function count_lots_by_category($link, $id)
     QUERY;
 
     $stmt = db_get_prepare_stmt($link, $sql, [$id]);
-    $res = mysqli_stmt_execute($stmt);
+    mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_assoc($res)['cnt'];
 }
@@ -146,13 +146,16 @@ function count_lots_by_category($link, $id)
  * @param int $lot_id ID лота
  * @return int Добавления ID победителя
  */
-function add_winner_on_db($link, $winner_id, $lot_id): array
+function add_winner_on_db($link, $winner_id, $lot_id)
 {
     $sql = <<<QUERY
         UPDATE lots SET winner_id=? WHERE id=?
     QUERY;
     $stmt = db_get_prepare_stmt($link, $sql, [$winner_id, $lot_id]);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    $res = mysqli_stmt_execute($stmt);
+    if ($res) {
+        echo "Обновление прошло успешно.";
+        return;
+    }
+    echo "Ошибка выполнения: " . mysqli_stmt_error($stmt);
 }

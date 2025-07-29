@@ -23,13 +23,14 @@ $user_name = '';
 $lot_name = '';
 $lot_id = 0;
 $email = '';
+$winners = [];
 
 if (!empty($bets)) {
     foreach ($bets as $bet) {
         $winner_id = intval($bet['user_id']);
         $lot_id = intval($bet['lot_id']);
         add_winner_on_db($link, $winner_id, $lot_id);
-        get_winners($link, $lot_id, $winner_id);
+        $winners = get_winners($link, $lot_id, $winner_id);
     }
     if (isset($winners)) {
         foreach ($winners as $winner) {
