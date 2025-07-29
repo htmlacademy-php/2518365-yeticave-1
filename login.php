@@ -56,13 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['password'] = 'Неверный пароль';
     }
 
-    $_SESSION['user'] = $user;
-
     if (!$user) {
         $errors['email'] = 'Такой пользователь не найден';
     }
 
     if (!count($errors)) {
+        $_SESSION['user'] = $user;
         header("Location: /index.php");
         die();
     }
